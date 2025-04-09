@@ -1,5 +1,5 @@
 from django.urls import path
-from hello import views
+from contact_hub_app import views
 
 urlpatterns = [
     path('', views.index, name='home'),
