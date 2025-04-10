@@ -144,9 +144,9 @@
         <form method="post">
             {% csrf_token %}
             
-            {% if form.errors %}
+            {% if error_message %}
                 <div style="color: var(--error-color); margin-bottom: 1rem;">
-                    Неверный логин или пароль
+                    {{ error_message }}
                 </div>
             {% endif %}
             
