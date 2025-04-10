@@ -1,13 +1,25 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import CustomLoginForm
+from .forms import CustomLoginForm, RegisterForm
 
 def index(request):
     return HttpResponse("Главная страница")
 
+# Регистрация пользователя
 def register_view(request):
-    return HttpResponse("Страница регистрации (здесь будет форма позже)")
+    if request.method == 'POST':
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            # В реальном приложении здесь будет создание пользователя
+            username = form.cleaned_data['username']
+            print(f"Регистрация нового пользователя: {username}")
+            return redirect('home')
+    else:
+        form = RegisterForm()
+    
+    return render(request, 'register.html', {'form': form})
 
+# Авторизация пользователя
 def login_view(request):
     error_message = None
     
