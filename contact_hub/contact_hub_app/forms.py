@@ -50,7 +50,23 @@ class RegisterForm(forms.Form):
         
 # Форма карточки с конатктами
 class ContactForm(forms.Form):
-    name = forms.CharField(label="Имя", max_length=100)
-    email = forms.EmailField(label="Email", required=False)
-    phone = forms.CharField(label="Телефон", max_length=20)
-    notes = forms.CharField(label="Краткая информация", widget=forms.Textarea, required=False)
+    name = forms.CharField(
+        label="Имя",
+        max_length=100,
+        widget=forms.TextInput(attrs={'class': 'auth-form-input'})
+    )
+    email = forms.EmailField(
+        label="Email",
+        required=False,
+        widget=forms.EmailInput(attrs={'class': 'auth-form-input'})
+    )
+    phone = forms.CharField(
+        label="Телефон",
+        max_length=20,
+        widget=forms.TextInput(attrs={'class': 'auth-form-input'})
+    )
+    notes = forms.CharField(
+        label="Краткая информация",
+        widget=forms.Textarea(attrs={'class': 'auth-form-input', 'rows': '3'}),
+        required=False
+    )

@@ -1,9 +1,5 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from .forms import CustomLoginForm, RegisterForm, ContactForm
-
-def index(request):
-    return HttpResponse("Главная страница")
 
 # Регистрация пользователя
 def register_view(request):
@@ -58,24 +54,23 @@ def contact_list(request):
         'contacts': CONTACTS
     })
 
-# Просмотр деталей контакта
-def contact_detail(request, pk):
-    # Находим контакт по id (pk — это число из URL)
-    contact = next((c for c in CONTACTS if c['id'] == pk), None)
+# # Просмотр деталей контакта
+# def contact_detail(request, pk):
+#     # Находим контакт по id (pk — это число из URL)
+#     contact = next((c for c in CONTACTS if c['id'] == pk), None)
     
-    if not contact:
-        return redirect('contact_list')  # Если контакт не найден
+#     if not contact:
+#         return redirect('contact_list')  # Если контакт не найден
     
-    return render(request, 'contacts/contact_detail.html', {
-        'contact': contact
-    })
+#     return render(request, 'contacts/contact_detail.html', {
+#         'contact': contact
+#     })
 
-# Создание нового контакта
+# Упрощаем view для создания контакта
 def contact_create(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
         if form.is_valid():
-            # Создаём новый контакт (позже заменим на БД)
             new_contact = {
                 'id': len(CONTACTS) + 1,
                 'name': form.cleaned_data['name'],
@@ -84,26 +79,12 @@ def contact_create(request):
                 'notes': form.cleaned_data.get('notes', ''),
             }
             CONTACTS.append(new_contact)
-            return redirect('contact_list')  # Переход к списку после сохранения
-    else:
-        form = ContactForm()  # Пустая форма для GET-запроса
+            return redirect('contact_list')
+    return redirect('contact_list')  # Для GET-запросов просто редирект
 
-    return render(request, 'contacts/contact_form.html', {
-        'form': form
-    })
-
-# Удаление контакта
+# Упрощаем view для удаления контакта
 def contact_delete(request, pk):
     if request.method == 'POST':
         global CONTACTS
         CONTACTS = [c for c in CONTACTS if c['id'] != pk]
-        return redirect('contact_list')
-    
-    # GET-запрос: показываем страницу подтверждения
-    contact = next((c for c in CONTACTS if c['id'] == pk), None)
-    if not contact:
-        return redirect('contact_list')
-    
-    return render(request, 'contacts/contact_confirm_delete.html', {
-        'contact': contact  # Передаем контакт в шаблон
-    })
+    return redirect('contact_list')

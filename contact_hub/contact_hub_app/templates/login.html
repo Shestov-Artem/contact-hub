@@ -1,151 +1,20 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Вход</title>
-    <style>
-        /* Сброс стандартных отступов и box-sizing */
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-        }
-    
-        /* Основные стили */
-        :root {
-            --primary-color: #4f46e5; /* Индиго */
-            --error-color: #ef4444;  /* Красный */
-        }
-        
-        body {
-            font-family: 'Segoe UI', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-            padding: 20px;
-        }
-        
-        .login-container {
-            width: 100%;
-            max-width: 400px;
-            background: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(10px);
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
-        }
-        
-        .form-title {
-            color: #333;
-            text-align: center;
-            margin-bottom: 1.5rem;
-            font-size: 1.8rem;
-        }
-        
-        .form-input {
-            width: 100%;
-            padding: 12px 16px;
-            margin-bottom: 1rem;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            /* Добавлено для правильного расчета ширины */
-            box-sizing: border-box;
-        }
-        
-        .form-input:focus {
-            border-color: var(--primary-color);
-            outline: none;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
-        }
-        
-        .submit-btn {
-            width: 100%;
-            padding: 12px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            /* Добавлено для правильного расчета ширины */
-            box-sizing: border-box;
-        }
-        
-        .submit-btn:hover {
-            background-color: #4338ca;
-            transform: translateY(-2px);
-        }
-        
-        .form-footer {
-            text-align: center;
-            margin-top: 1.5rem;
-            color: #64748b;
-        }
-        
-        .form-footer a {
-            color: var(--primary-color);
-            text-decoration: none;
-        }
-        
-        /* Анимации */
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
-        .login-container {
-            animation: fadeIn 0.6s ease-out;
-        }
-
-        .register-btn {
-            display: inline-block;
-            margin-top: 1rem;
-            padding: 0.75rem 1.5rem;
-            background-color: white;
-            color: var(--primary-color);
-            border: 2px solid var(--primary-color);
-            border-radius: 8px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .register-btn:hover {
-            background-color: var(--primary-color);
-            color: white;
-            transform: translateY(-2px);
-        }
-        
-        /* Мобильная адаптация */
-        @media (max-width: 480px) {
-            .login-container {
-                margin: 0;
-                padding: 1.5rem;
-            }
-            
-            body {
-                padding: 10px;
-            }
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <div class="login-container">
-        <h1 class="form-title">Вход в систему</h1>
+    <div class="auth-container">
+        <h1 class="auth-form-title">Вход в систему</h1>
         <form method="post">
             {% csrf_token %}
             
             {% if error_message %}
-                <div style="color: var(--error-color); margin-bottom: 1rem;">
+                <div class="error-message">
                     {{ error_message }}
                 </div>
             {% endif %}
@@ -153,12 +22,12 @@
             {{ form.username }}
             {{ form.password }}
             
-            <button type="submit" class="submit-btn">Войти</button>
+            <button type="submit" class="auth-submit-btn">Войти</button>
         </form>
         
-        <div class="form-footer">
+        <div class="auth-form-footer">
             <p>Нет аккаунта?</p>
-            <a href="{% url 'register' %}" class="register-btn">Зарегистрироваться</a>
+            <a href="{% url 'register' %}" class="auth-register-btn">Зарегистрироваться</a>
         </div>
     </div>
 </body>
