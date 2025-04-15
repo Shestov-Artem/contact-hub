@@ -3,31 +3,51 @@ import psycopg2
 host = "localhost"
 port = "6432"  
 database = "postgres"  
-user = "postgres"
-password = "3507874"
+db_user = "postgres"
+db_password = "3507874"
 
+connection = None
+cursor = None
 
-try:
-    connection = psycopg2.connect(
-        host=host,
-        port=port,
-        database=database,
-        user=user,
-        password=password,
-    )
-
-    with connection.cursor() as cursor:
-        cursor.execute(
-            "SELECT * from users"
+def find_user_by_credentials(username, password):
+    global connection, cursor
+    try:
+        connection = psycopg2.connect(
+            host=host,
+            port=port,
+            database=database,
+            user = db_user,
+            password = db_password,
         )
-        print(cursor.fetchone())
+        cursor = connection.cursor()
 
+        cursor.execute(
+            "SELECT id FROM users WHERE username = %s AND password = %s", (username, password)
+        )
 
-   
-except Exception as _ex:
-    print("[INFO] Erorr while working with PostgreSQL", _ex)
+        user = cursor.fetchone()
 
-finally:
-    if connection:
-        connection.close()
-        print("[INFO] connection close")
+        if user:
+            return user[0] 
+        else:
+            return None  
+
+    except Exception as _ex:
+        print("[INFO] Error while working with PostgreSQL:", _ex)
+        return None
+    finally:
+        if cursor:
+            cursor.close()
+        if connection:
+            connection.close()
+
+# тест использование
+username = input( "имя пользователя: ")
+password = input(" пароль: ")
+
+user_id = find_user_by_credentials(username, password)
+
+if user_id:
+    print(f"Пользователь найден - ID: {user_id}")
+else:
+    print("Пользователь не найден")
