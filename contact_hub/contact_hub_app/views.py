@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import HttpResponse
-from .forms import CustomLoginForm, RegisterForm
+from .forms import CustomLoginForm, RegisterForm, ContactForm
 
 def index(request):
     return HttpResponse("Главная страница")
@@ -13,7 +13,7 @@ def register_view(request):
             # В реальном приложении здесь будет создание пользователя
             username = form.cleaned_data['username']
             print(f"Регистрация нового пользователя: {username}")
-            return redirect('home')
+            return redirect('contact_list')
     else:
         form = RegisterForm()
     
@@ -31,7 +31,7 @@ def login_view(request):
             
             # Кастомная проверка (замените на реальную проверку в БД позже)
             if username != "1" and password != "1":
-                return redirect('home')
+                return redirect('contact_list')
             else:
                 error_message = "Неверный логин или пароль"
     else:
@@ -40,4 +40,70 @@ def login_view(request):
     return render(request, 'login.html', {
         'form': form,
         'error_message': error_message  # Передаём сообщение об ошибке
+    })
+
+
+# ------------------------------------------------------------------------------------------------------------------------
+
+# Временное хранилище контактов (позже заменится на БД)
+CONTACTS = [
+    {"id": 1, "name": "Иван", "phone": "+79123456789"},
+    {"id": 2, "name": "Мария", "phone": "+79876543210"},
+]
+
+# Главная страница со списком контактов
+def contact_list(request):
+    # Просто передаём все контакты в шаблон
+    return render(request, 'contacts/contact_list.html', {
+        'contacts': CONTACTS
+    })
+
+# Просмотр деталей контакта
+def contact_detail(request, pk):
+    # Находим контакт по id (pk — это число из URL)
+    contact = next((c for c in CONTACTS if c['id'] == pk), None)
+    
+    if not contact:
+        return redirect('contact_list')  # Если контакт не найден
+    
+    return render(request, 'contacts/contact_detail.html', {
+        'contact': contact
+    })
+
+# Создание нового контакта
+def contact_create(request):
+    if request.method == 'POST':
+        form = ContactForm(request.POST)
+        if form.is_valid():
+            # Создаём новый контакт (позже заменим на БД)
+            new_contact = {
+                'id': len(CONTACTS) + 1,
+                'name': form.cleaned_data['name'],
+                'phone': form.cleaned_data['phone'],
+                'email': form.cleaned_data.get('email', ''),
+                'notes': form.cleaned_data.get('notes', ''),
+            }
+            CONTACTS.append(new_contact)
+            return redirect('contact_list')  # Переход к списку после сохранения
+    else:
+        form = ContactForm()  # Пустая форма для GET-запроса
+
+    return render(request, 'contacts/contact_form.html', {
+        'form': form
+    })
+
+# Удаление контакта
+def contact_delete(request, pk):
+    if request.method == 'POST':
+        global CONTACTS
+        CONTACTS = [c for c in CONTACTS if c['id'] != pk]
+        return redirect('contact_list')
+    
+    # GET-запрос: показываем страницу подтверждения
+    contact = next((c for c in CONTACTS if c['id'] == pk), None)
+    if not contact:
+        return redirect('contact_list')
+    
+    return render(request, 'contacts/contact_confirm_delete.html', {
+        'contact': contact  # Передаем контакт в шаблон
     })
