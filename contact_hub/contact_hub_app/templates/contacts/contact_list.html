@@ -5,22 +5,52 @@
     <title>Мои контакты</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <style>
+        .contact-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #e2e8f0;
+            margin-right: 1rem;
+            border: 2px solid white;
+            box-shadow: var(--box-shadow);
+        }
+        
+        .card-header-content {
+            display: flex;
+            align-items: center;
+        }
+        
+        .modal-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 1.5rem;
+            border: 3px solid white;
+            box-shadow: var(--box-shadow);
+        }
+    </style>
 </head>
 <body>
     <div class="container">
         <h1>Мои контакты</h1>
         
-        <!-- Ссылка для открытия модального окна добавления -->
         <a href="#add-contact-modal" class="btn btn-primary">+ Добавить контакт</a>
 
         <div class="contact-grid">
             {% for contact in contacts %}
                 <div class="card">
                     <div class="card-body">
-                        <h5 class="card-title">{{ contact.name }}</h5>
-                        <p class="card-text">{{ contact.phone }}</p>
-                        <div class="btn-group">
-                            <!-- Ссылки для открытия модальных окон -->
+                        <div class="card-header-content">
+                            <img src="{% static 'images/default-avatar.png' %}" alt="{{ contact.name }}" class="contact-avatar">
+                            <div>
+                                <h5 class="card-title">{{ contact.name }}</h5>
+                                <p class="card-text">{{ contact.phone }}</p>
+                            </div>
+                        </div>
+                        <div class="btn-group" style="margin-top: 1rem;">
                             <a href="#view-contact-modal-{{ contact.id }}" class="btn btn-info btn-sm">Подробнее</a>
                             <a href="#delete-contact-modal-{{ contact.id }}" class="btn btn-danger btn-sm">Удалить</a>
                         </div>
@@ -32,7 +62,10 @@
                     <div class="modal-content">
                         <div class="card">
                             <div class="card-header">
-                                <h2>{{ contact.name }}</h2>
+                                <div style="display: flex; align-items: center;">
+                                    <img src="{% static 'images/default-avatar.png' %}" alt="{{ contact.name }}" class="modal-avatar">
+                                    <h2>{{ contact.name }}</h2>
+                                </div>
                             </div>
                             <div class="card-body">
                                 <p><strong>Телефон:</strong> {{ contact.phone }}</p>
@@ -65,33 +98,32 @@
 
     <!-- Модальное окно добавления контакта -->
     <div id="add-contact-modal" class="modal">
-    <div class="modal-content">
-        <h2 style="margin-bottom: 1rem;">Добавить контакт</h2>
-        <form method="post" action="{% url 'contact_create' %}">
-            {% csrf_token %}
-            <div class="form-group">
-                <label for="id_name">Имя:</label>
-                <input type="text" name="name" id="id_name" class="auth-form-input" required>
-            </div>
-            <div class="form-group">
-                <label for="id_phone">Телефон:</label>
-                <input type="tel" name="phone" id="id_phone" class="auth-form-input" required>
-            </div>
-            <div class="form-group">
-                <label for="id_email">Email (необязательно):</label>
-                <input type="email" name="email" id="id_email" class="auth-form-input">
-            </div>
-            <div class="form-group">
-                <label for="id_notes">Заметки:</label>
-                <textarea name="notes" id="id_notes" class="auth-form-input" rows="3"></textarea>
-            </div>
-            <div style="display: flex; gap: 10px; margin-top: 1rem;">
-                <button type="submit" class="btn btn-success">Сохранить</button>
-                <a href="#" class="btn btn-secondary">Отмена</a>
-            </div>
-        </form>
+        <div class="modal-content">
+            <h2 style="margin-bottom: 1rem;">Добавить контакт</h2>
+            <form method="post" action="{% url 'contact_create' %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="id_name">Имя:</label>
+                    <input type="text" name="name" id="id_name" class="auth-form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_phone">Телефон:</label>
+                    <input type="tel" name="phone" id="id_phone" class="auth-form-input" required>
+                </div>
+                <div class="form-group">
+                    <label for="id_email">Email (необязательно):</label>
+                    <input type="email" name="email" id="id_email" class="auth-form-input">
+                </div>
+                <div class="form-group">
+                    <label for="id_notes">Заметки:</label>
+                    <textarea name="notes" id="id_notes" class="auth-form-input" rows="3"></textarea>
+                </div>
+                <div style="display: flex; gap: 10px; margin-top: 1rem;">
+                    <button type="submit" class="btn btn-success">Сохранить</button>
+                    <a href="#" class="btn btn-secondary">Отмена</a>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
-</div>
 </body>
 </html>
