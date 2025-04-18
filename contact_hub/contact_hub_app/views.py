@@ -1,15 +1,26 @@
 from django.shortcuts import render, redirect
 from .forms import CustomLoginForm, RegisterForm, ContactForm
 
+from .database import create_user, find_user_by_credentials
+
 # Регистрация пользователя
 def register_view(request):
     if request.method == 'POST':
         form = RegisterForm(request.POST)
         if form.is_valid():
-            # В реальном приложении здесь будет создание пользователя
             username = form.cleaned_data['username']
-            print(f"Регистрация нового пользователя: {username}")
-            return redirect('contact_list')
+            password = form.cleaned_data['password']
+            
+            # Создаем пользователя в базе данных
+            user_id = create_user(username, password)
+            
+            if user_id:
+                print(f"Успешная регистрация пользователя {username} с ID {user_id}")
+                return redirect('contact_list')
+            else:
+                form.add_error(None, "Ошибка при создании пользователя")
+        else:
+            print("Форма не валидна:", form.errors)
     else:
         form = RegisterForm()
     
@@ -25,8 +36,10 @@ def login_view(request):
             username = form.cleaned_data['username']
             password = form.cleaned_data['password']
             
-            # Кастомная проверка (замените на реальную проверку в БД позже)
-            if username != "1" and password != "1":
+            # Проверяем учетные данные в БД
+            user_id = find_user_by_credentials(username, password)
+            
+            if user_id:
                 return redirect('contact_list')
             else:
                 error_message = "Неверный логин или пароль"
@@ -35,7 +48,7 @@ def login_view(request):
     
     return render(request, 'login.html', {
         'form': form,
-        'error_message': error_message  # Передаём сообщение об ошибке
+        'error_message': error_message
     })
 
 # Выход из системы
@@ -58,18 +71,6 @@ def contact_list(request):
     return render(request, 'contacts/contact_list.html', {
         'contacts': CONTACTS
     })
-
-# # Просмотр деталей контакта
-# def contact_detail(request, pk):
-#     # Находим контакт по id (pk — это число из URL)
-#     contact = next((c for c in CONTACTS if c['id'] == pk), None)
-    
-#     if not contact:
-#         return redirect('contact_list')  # Если контакт не найден
-    
-#     return render(request, 'contacts/contact_detail.html', {
-#         'contact': contact
-#     })
 
 # view для создания контакта
 def contact_create(request):
