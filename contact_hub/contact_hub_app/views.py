@@ -38,6 +38,11 @@ def login_view(request):
         'error_message': error_message  # Передаём сообщение об ошибке
     })
 
+# Выход из системы
+def logout_view(request):
+    # В реальном приложении здесь будет выход из системы
+    # auth_logout(request)  # Раскомментируйте, когда добавите аутентификацию Django
+    return redirect('login')  # Перенаправляем на страницу регистрации
 
 # ------------------------------------------------------------------------------------------------------------------------
 
@@ -66,7 +71,7 @@ def contact_list(request):
 #         'contact': contact
 #     })
 
-# Упрощаем view для создания контакта
+# view для создания контакта
 def contact_create(request):
     if request.method == 'POST':
         form = ContactForm(request.POST)
@@ -82,9 +87,29 @@ def contact_create(request):
             return redirect('contact_list')
     return redirect('contact_list')  # Для GET-запросов просто редирект
 
-# Упрощаем view для удаления контакта
+# view для удаления контакта
 def contact_delete(request, pk):
     if request.method == 'POST':
         global CONTACTS
         CONTACTS = [c for c in CONTACTS if c['id'] != pk]
     return redirect('contact_list')
+
+
+def contact_list(request):
+    search_query = request.GET.get('search', '')
+    
+    if search_query:
+        # Фильтрация контактов по имени (регистронезависимо)
+        filtered_contacts = [
+            c for c in CONTACTS 
+            if search_query.lower() in c['name'].lower()
+        ]
+    else:
+        filtered_contacts = CONTACTS
+    
+    return render(request, 'contacts/contact_list.html', {
+        'contacts': filtered_contacts,
+        'search_query': search_query
+    })
+
+

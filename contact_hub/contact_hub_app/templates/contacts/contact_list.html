@@ -31,11 +31,35 @@
             border: 3px solid white;
             box-shadow: var(--box-shadow);
         }
+        
+        .header-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Мои контакты</h1>
+        <div class="header-container">
+            <h1 class="header-title">Мои контакты</h1>
+            
+            <form method="get" action="{% url 'contact_list' %}" class="search-form">
+                <div class="search-container">
+                    <input 
+                        type="text" 
+                        name="search" 
+                        placeholder="Поиск по имени..." 
+                        class="search-input"
+                        value="{{ request.GET.search }}"
+                    >
+                    <div class="search-hint">Нажмите Enter для поиска</div>
+                </div>
+            </form>
+            
+            <a href="{% url 'logout' %}" class="btn btn-danger logout-btn">Выйти</a>
+        </div>
         
         <a href="#add-contact-modal" class="btn btn-primary">+ Добавить контакт</a>
 

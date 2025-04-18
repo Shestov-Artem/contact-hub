@@ -114,7 +114,10 @@ h1 {
 }
 
 .auth-submit-btn {
+    display: block; /* Изменяем с inline-block на block */
     width: 100%;
+    /* max-width: 300px; */
+    margin: 0 auto; /* Центрирование */
     padding: 12px;
     background-color: var(--primary-color);
     color: white;
@@ -129,6 +132,64 @@ h1 {
 .auth-submit-btn:hover {
     background-color: var(--primary-hover);
     transform: translateY(-2px);
+}
+
+/* Кнопка регистрации в формах авторизации */
+.auth-register-btn {
+    display: block; /* Изменяем с inline-block на block */
+    width: 100%;
+    /* max-width: 300px; */
+    margin: 1rem auto 0; /* Отступ сверху и автоматические отступы по бокам */
+    padding: 0.75rem 1.5rem;
+    display: inline-block;
+    background-color: white;
+    color: var(--primary-color);
+    border: 2px solid var(--primary-color);
+    border-radius: var(--border-radius);
+    font-weight: 600;
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.auth-register-btn {
+    background-color: transparent;
+    border-color: var(--secondary-color);
+    color: var(--secondary-color);
+}
+
+.auth-register-btn:hover {
+    background-color: var(--secondary-color);
+    border-color: var(--secondary-color);
+    color: white;
+}
+
+.auth-container {
+    /* существующие стили */
+    text-align: center; /* Выравнивание текста по центру */
+}
+
+.auth-form-title {
+    text-align: center; /* Центрируем заголовок */
+    margin-bottom: 1.5rem;
+}
+
+.auth-form-footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    width: 100%;
+    /* max-width: 300px; */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.auth-form-footer p {
+    margin-bottom: 0.5rem; /* Отступ для текста над кнопкой */
+}
+
+/* Центрируем кнопку регистрации */
+.auth-register-btn {
+    display: inline-block; /* или block с margin: 0 auto */
+    margin: 0.5rem auto 0; /* Верхний отступ и автоматические боковые отступы */
 }
 
 /* Карточки */
@@ -304,4 +365,152 @@ textarea {
     .modal-content .btn {
         padding: 0.5rem 1rem;
     }
+}
+
+/* Стили для поиска */
+.header-search {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    flex-grow: 1;
+}
+
+.search-form {
+    width: 100%;
+    max-width: 400px;
+}
+
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-input {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: var(--transition);
+    box-sizing: border-box;
+}
+
+.search-input:focus {
+    border-color: var(--primary-color);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.2);
+}
+
+.search-hint {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--secondary-color);
+    background-color: white;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    box-shadow: var(--box-shadow);
+    opacity: 0;
+    transition: var(--transition);
+    z-index: 10;
+}
+
+.search-input:focus + .search-hint {
+    opacity: 1;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 480px) {
+    .header-container {
+        flex-direction: column;
+    }
+    
+    .search-form {
+        max-width: 100%;
+    }
+}
+
+/* Стили для шапки */
+.header-container {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    margin-bottom: 1.5rem;
+    flex-wrap: wrap;
+}
+
+.header-title {
+    margin: 0;
+    white-space: nowrap;
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+.search-form {
+    flex: 1;
+    min-width: 200px;
+    max-width: 400px;
+    position: relative;
+}
+
+.logout-btn {
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+/* Адаптация для мобильных */
+@media (max-width: 768px) {
+    .header-container {
+        gap: 1rem;
+    }
+    
+    .header-title {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 480px) {
+    .header-container {
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .search-form {
+        order: 3;
+        width: 100%;
+        max-width: 100%;
+        margin-top: 0.5rem;
+    }
+    
+    .logout-btn {
+        margin-left: 0;
+    }
+}
+
+.search-container {
+    position: relative;
+    width: 100%;
+}
+
+.search-hint {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    padding: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--secondary-color);
+    background-color: white;
+    border-radius: 0 0 var(--border-radius) var(--border-radius);
+    box-shadow: var(--box-shadow);
+    opacity: 0;
+    transition: var(--transition);
+    z-index: 10;
+    pointer-events: none;
+}
+
+.search-input:focus + .search-hint {
+    opacity: 1;
 }
