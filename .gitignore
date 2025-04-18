@@ -1,0 +1,19 @@
+# Django
+*.sqlite3
+*.pyc
+__pycache__/
+.env
+
+# IDE
+.vscode/
+
+# Логи и временные файлы
+*.log
+*.pot
+*.pid
+*.dump
+
+# Системные файлы
+.DS_Store
+
+*.pgsql  # Если хотите игнорировать SQL-дампы
