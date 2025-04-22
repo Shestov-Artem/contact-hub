@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <div class="auth-container">
+        <h1 class="auth-form-title">Регистрация</h1>
+        
+        {% if form.errors %}
+            <div class="error-message">
+                {% for field, errors in form.errors.items %}
+                    {% for error in errors %}
+                        {{ error }}<br>
+                    {% endfor %}
+                {% endfor %}
+            </div>
+        {% endif %}
+        
+        <form method="post">
+            {% csrf_token %}
+            
+            <div>
+                <label for="id_username">Имя пользователя:</label>
+                {{ form.username }}
+            </div>
+            
+            <div>
+                <label for="id_password">Пароль:</label>
+                {{ form.password }}
+            </div>
+            
+            <div>
+                <label for="id_password_confirm">Повторите пароль:</label>
+                {{ form.password_confirm }}
+            </div>
+            
+            <button type="submit" class="auth-submit-btn">Зарегистрироваться</button>
+        </form>
+    </div>
+</body>
+</html>
